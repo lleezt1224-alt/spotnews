@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>香港零售「回暖」與結業潮並存 - 數據新聞</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 </head>
 <body>
     <!-- 導覽欄 -->
     <nav class="navbar">
         <div class="container">
-            <div class="logo">香港零售故事</div>
+            <div class="logo">香港數據新聞</div>
             <ul class="nav-links">
                 <li><a href="#story">故事</a></li>
                 <li><a href="#data">數據</a></li>
@@ -107,6 +109,102 @@
                 </p>
             </div>
 
+            <!-- 熱力圖部分 -->
+            <div class="content-block">
+                <h2>香港商鋪空置率熱力圖</h2>
+                <p>2025年Q3 各地區商鋪空置率分佈</p>
+                
+                <div class="heatmap-content">
+                    <div id="map" class="heatmap-map"></div>
+                    
+                    <div class="heatmap-legend">
+                        <div class="legend-title">空置率級別</div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #00b894;"></div>
+                            <span class="legend-label">< 10% (低)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #f39c12;"></div>
+                            <span class="legend-label">10-12% (中)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #e74c3c;"></div>
+                            <span class="legend-label">12-15% (高)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #c0392b;"></div>
+                            <span class="legend-label">> 15% (極高)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="heatmap-table">
+                    <h3>各地區2025年Q3空置率數據</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>地區</th>
+                                <th>空置率</th>
+                                <th>商舖數量</th>
+                                <th>空置數量</th>
+                                <th>級別</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>中環</td>
+                                <td class="vacancy-high">15.2%</td>
+                                <td>212</td>
+                                <td>32</td>
+                                <td>極高</td>
+                            </tr>
+                            <tr>
+                                <td>尖沙咀</td>
+                                <td class="vacancy-high">12.5%</td>
+                                <td>185</td>
+                                <td>23</td>
+                                <td>高</td>
+                            </tr>
+                            <tr>
+                                <td>旺角</td>
+                                <td class="vacancy-low">9.9%</td>
+                                <td>341</td>
+                                <td>34</td>
+                                <td>低</td>
+                            </tr>
+                            <tr>
+                                <td>銅鑼灣</td>
+                                <td class="vacancy-medium">13.2%</td>
+                                <td>143</td>
+                                <td>19</td>
+                                <td>高</td>
+                            </tr>
+                            <tr>
+                                <td>四核心區</td>
+                                <td class="vacancy-medium">11.9%</td>
+                                <td>881</td>
+                                <td>105</td>
+                                <td>中</td>
+                            </tr>
+                            <tr>
+                                <td>元朗</td>
+                                <td class="vacancy-low">10.1%</td>
+                                <td>261</td>
+                                <td>26</td>
+                                <td>低</td>
+                            </tr>
+                            <tr>
+                                <td>上水</td>
+                                <td class="vacancy-low">10.3%</td>
+                                <td>88</td>
+                                <td>9</td>
+                                <td>低</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- 結論 -->
             <div class="content-block highlight">
                 <h2>結論：「結構性復甦」而非全面回暖</h2>
@@ -156,6 +254,8 @@
         </div>
     </section>
 
+
+
     <!-- 頁腳 -->
     <footer class="footer">
         <div class="container">
@@ -166,5 +266,136 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        // 等待DOM加載完成後初始化地圖
+        document.addEventListener('DOMContentLoaded', function() {
+            // 檢查地圖容器是否存在
+            if (document.getElementById('map')) {
+                // 初始化熱力圖
+                const map = L.map('map').setView([22.3193, 114.1694], 11);
+
+                // 添加底圖
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors',
+                    maxZoom: 19
+                }).addTo(map);
+
+        // 香港各地區的地理座標和數據
+        const districts = [
+            {
+                name: '中環',
+                coords: [22.2855, 114.1586],
+                vacancy: 15.2,
+                shops: 212,
+                empty: 32
+            },
+            {
+                name: '尖沙咀',
+                coords: [22.2979, 114.1725],
+                vacancy: 12.5,
+                shops: 185,
+                empty: 23
+            },
+            {
+                name: '旺角',
+                coords: [22.3193, 114.1694],
+                vacancy: 9.9,
+                shops: 341,
+                empty: 34
+            },
+            {
+                name: '銅鑼灣',
+                coords: [22.2766, 114.1839],
+                vacancy: 13.2,
+                shops: 143,
+                empty: 19
+            },
+            {
+                name: '元朗',
+                coords: [22.4456, 114.0269],
+                vacancy: 10.1,
+                shops: 261,
+                empty: 26
+            },
+            {
+                name: '上水',
+                coords: [22.5051, 114.1080],
+                vacancy: 10.3,
+                shops: 88,
+                empty: 9
+            }
+        ];
+
+        // 根據空置率返回顏色
+        function getColor(vacancy) {
+            if (vacancy > 15) return '#c0392b';
+            if (vacancy > 12) return '#e74c3c';
+            if (vacancy > 10) return '#f39c12';
+            return '#00b894';
+        }
+
+        // 添加圓形標記
+        districts.forEach(district => {
+            const color = getColor(district.vacancy);
+            const radius = 15 + (district.vacancy * 2);
+
+            const circle = L.circleMarker(district.coords, {
+                radius: radius,
+                fillColor: color,
+                color: '#fff',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.7
+            }).addTo(map);
+
+            const popupContent = `
+                <div style="font-family: Arial, sans-serif; width: 200px;">
+                    <h3 style="margin: 0 0 0.5rem 0; color: #2d5a3d; font-size: 1.1rem;">${district.name}</h3>
+                    <div style="background: #f8f9fa; padding: 0.8rem; border-radius: 4px;">
+                        <p style="margin: 0.3rem 0;"><strong>空置率:</strong> ${district.vacancy}%</p>
+                        <p style="margin: 0.3rem 0;"><strong>商舖數量:</strong> ${district.shops}</p>
+                        <p style="margin: 0.3rem 0;"><strong>空置數量:</strong> ${district.empty}</p>
+                    </div>
+                </div>
+            `;
+
+            circle.bindPopup(popupContent);
+
+            L.tooltip({
+                permanent: true,
+                direction: 'center',
+                className: 'district-label'
+            }).setContent(district.name)
+              .setLatLng(district.coords)
+              .addTo(map);
+        });
+
+        // 自定義標籤樣式
+        const style = document.createElement('style');
+        style.textContent = `
+            .district-label {
+                background: rgba(45, 90, 61, 0.9) !important;
+                color: white !important;
+                border: none !important;
+                border-radius: 4px !important;
+                padding: 4px 8px !important;
+                font-weight: 600 !important;
+                font-size: 12px !important;
+                white-space: nowrap !important;
+            }
+
+            .leaflet-popup-content-wrapper {
+                border-radius: 8px !important;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+            }
+
+            .leaflet-popup-tip {
+                background: white !important;
+            }
+        `;
+        document.head.appendChild(style);
+            }
+        });
+    </script>
 </body>
 </html>
