@@ -343,6 +343,108 @@ body {
     font-style: italic;
 }
 
+/* ===== 熱力圖部分 ===== */
+.heatmap-map {
+    width: 100%;
+    height: 600px;
+    border-radius: 8px;
+    border: 2px solid var(--border-color);
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.heatmap-content {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.heatmap-legend {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    height: fit-content;
+}
+
+.legend-title {
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    font-size: 0.95rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    font-size: 0.85rem;
+}
+
+.legend-color {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    margin-right: 0.8rem;
+    border: 1px solid #ddd;
+    flex-shrink: 0;
+}
+
+.legend-label {
+    color: var(--text-dark);
+}
+
+.heatmap-table {
+    margin-top: 2rem;
+}
+
+.heatmap-table h3 {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent-color);
+}
+
+.heatmap-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.heatmap-table th {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #1e4d2b 100%);
+    color: white;
+    padding: 0.8rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.heatmap-table td {
+    padding: 0.8rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.heatmap-table tr:hover {
+    background: var(--bg-light);
+}
+
+.vacancy-high {
+    color: #d63031;
+    font-weight: 600;
+}
+
+.vacancy-medium {
+    color: #f39c12;
+    font-weight: 600;
+}
+
+.vacancy-low {
+    color: #27ae60;
+    font-weight: 600;
+}
+
 /* ===== 響應式設計 ===== */
 @media (max-width: 768px) {
     .hero {
@@ -386,6 +488,43 @@ body {
     .chart-caption {
         font-size: 0.85rem;
     }
+
+    .heatmap-content {
+        grid-template-columns: 1fr;
+    }
+
+    .heatmap-map {
+        height: 500px;
+    }
+
+    .heatmap-legend {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        height: auto;
+    }
+
+    .heatmap-table table {
+        font-size: 0.75rem;
+    }
+
+    .heatmap-table th,
+    .heatmap-table td {
+        padding: 0.5rem;
+    }
+}
+
+    .promo-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .promo-text h2 {
+        font-size: 1.5rem;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -408,6 +547,20 @@ body {
 
     .data-value {
         font-size: 1.5rem;
+    }
+
+    .promo-text h2 {
+        font-size: 1.3rem;
+    }
+
+    .promo-button {
+        display: block;
+        text-align: center;
+        width: 100%;
+    }
+
+    .promo-stats {
+        grid-template-columns: 1fr;
     }
 }
 
