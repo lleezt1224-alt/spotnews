@@ -210,7 +210,7 @@ body {
 
 .content-block.highlight {
     background: linear-gradient(135deg, rgba(45, 90, 61, 0.08) 0%, rgba(0, 184, 148, 0.08) 100%);
-    padding: 2rem;
+    padding: 1.2rem;
     border-radius: 8px;
     border-left: 4px solid var(--accent-color);
     margin-top: 2rem;
