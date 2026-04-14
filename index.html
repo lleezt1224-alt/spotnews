@@ -192,7 +192,12 @@
                     網上銷售同樣持續增長，2026年1月按年升25.1%，但佔總零售額仍只有8%，短期內未能完全補足實體門店的壓力。
                 </p>
             </div>
-
+ <!-- 網上銷售構成圖表 -->
+            <div class="chart-container">
+                <h3>💻 網上銷售構成：2026年1月</h3>
+                <canvas id="onlineSalesChart" style="max-height: 400px;"></canvas>
+                <p class="chart-caption">網上銷售由無店面零售商（53.1%）和其他零售商（46.9%）組成。無店面零售商（如電商平台）佔據超過一半的網上銷售份額。</p>
+            </div>
             <!-- 第四段：歷史背景 -->
             <div class="content-block">
                 <h2>疫情遺留　元氣未復</h2>
@@ -394,6 +399,87 @@
             }
         `;
         document.head.appendChild(style);
+
+        // 初始化網上銷售圖表
+        const onlineSalesCtx = document.getElementById('onlineSalesChart');
+        if (onlineSalesCtx) {
+            new Chart(onlineSalesCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['2026年1月網上銷售構成'],
+                    datasets: [
+                        {
+                            label: '無店面零售',
+                            data: [53.1],
+                            backgroundColor: '#00b894',
+                            borderColor: '#27ae60',
+                            borderWidth: 2
+                        },
+                        {
+                            label: '其他零售商',
+                            data: [46.9],
+                            backgroundColor: '#3498db',
+                            borderColor: '#2980b9',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 13,
+                                    family: 'Microsoft YaHei, Arial, sans-serif'
+                                },
+                                color: '#2c3e50',
+                                padding: 15,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.x.toFixed(1) + '%';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                },
+                                font: {
+                                    size: 11
+                                },
+                                color: '#7f8c8d'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        y: {
+                            stacked: true,
+                            ticks: {
+                                font: {
+                                    size: 12,
+                                    weight: 'bold'
+                                },
+                                color: '#2c3e50'
+                            }
+                        }
+                    }
+                }
+            });
+        }
             }
         });
     </script>
