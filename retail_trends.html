@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>香港零售銷售指數趨勢 - 2020-2026</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2d5a3d 0%, #1e4d2b 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 4px solid #00b894;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.95;
+            margin-bottom: 0.3rem;
+        }
+
+        .header .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.85;
+            font-style: italic;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 500px;
+            margin-bottom: 30px;
+            background: #fafafa;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+        }
+
+        .legend-info {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            padding: 20px;
+            background: #f0f7f4;
+            border-radius: 8px;
+            border-left: 4px solid #00b894;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .legend-color {
+            width: 40px;
+            height: 20px;
+            border-radius: 3px;
+            border: 1px solid #ddd;
+        }
+
+        .legend-label {
+            color: #2d5a3d;
+        }
+
+        .data-description {
+            background: #f8f9fa;
+            border-left: 4px solid #00b894;
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin-top: 30px;
+            font-size: 0.95rem;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .key-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f0f7f4 0%, #e8f5f0 100%);
+            border-left: 4px solid #00b894;
+            padding: 1.2rem;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .stat-card h3 {
+            color: #2d5a3d;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            color: #00b894;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .stat-card .unit {
+            color: #7f8c8d;
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+        }
+
+        .data-table {
+            margin-top: 30px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #2d5a3d 0%, #1e4d2b 100%);
+            color: white;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #00b894;
+            font-size: 0.9rem;
+        }
+
+        td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 0.9rem;
+        }
+
+        tbody tr:hover {
+            background-color: #f5f7fa;
+            transition: background-color 0.3s ease;
+        }
+
+        .value-positive {
+            color: #00b894;
+            font-weight: 600;
+        }
+
+        .value-negative {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        .highlight-row {
+            background-color: #f0f7f4;
+            font-weight: 600;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 2rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            border-top: 1px solid #e9ecef;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .chart-wrapper {
+                height: 350px;
+            }
+
+            .legend-info {
+                gap: 20px;
+                flex-direction: column;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .key-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 頁頭 -->
+        <div class="header">
+            <h1>📈 香港零售銷售指數走勢</h1>
+            <p>2020年1月 - 2026年2月 月度數據展示</p>
+            <p class="subtitle">疫情影響與復甦過程完整記錄</p>
+        </div>
+
+        <!-- 主要內容 -->
+        <div class="content">
+            <!-- 圖例 -->
+            <div class="legend-info">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #4a9d6f;"></div>
+                    <span class="legend-label">🟩 零售業銷貨價值指數</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #d63031;"></div>
+                    <span class="legend-label">🔴 按年變動百分率 (%)</span>
+                </div>
+            </div>
+
+            <!-- 圖表容器 -->
+            <div class="chart-wrapper">
+                <canvas id="retailTrendsChart"></canvas>
+            </div>
+
+            <!-- 關鍵統計 -->
+            <div class="key-stats">
+                <div class="stat-card">
+                    <h3>2026年2月銷售指數</h3>
+                    <div class="value">125.5</div>
+                    <div class="unit">（初步數據）</div>
+                </div>
+                <div class="stat-card">
+                    <h3>2月按年變動</h3>
+                    <div class="value" style="color: #00b894;">+19.3%</div>
+                    <div class="unit">相較2025年2月</div>
+                </div>
+                <div class="stat-card">
+                    <h3>最高峰值</h3>
+                    <div class="value">195.3</div>
+                    <div class="unit">2014年1月</div>
+                </div>
+                <div class="stat-card">
+                    <h3>最低谷</h3>
+                    <div class="value">81.4</div>
+                    <div class="unit">2020年2月（疫情初期）</div>
+                </div>
+            </div>
+
+            <!-- 資料說明 -->
+            <div class="data-description">
+                <strong>📌 數據解讀：</strong>
+                <p style="margin-top: 0.5rem;">
+                    從2020年初的疫情衝擊到2026年的復甦，香港零售業經曆了劇烈波動。2020年2月跌至81.4（同比下跌44%），創造疫情期間最低點。隨後逐步恢復，2023年開始強勁反彈。2026年1月銷售指數達133.7（同比上升5.5%），2月更升至125.5（初步數據，同比上升19.3%），顯示零售市場持續向好發展。儘管仍未達到2013-2014年的歷史高峰（195.3），但復甦勢頭已相當明顯。
+                </p>
+            </div>
+
+            <!-- 資料表格 -->
+            <div class="data-table">
+                <h3 style="color: #2d5a3d; margin-bottom: 1rem;">最近12個月詳細數據</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>年份</th>
+                            <th>月份</th>
+                            <th>銷售額<br>（百萬元）</th>
+                            <th>價值指數</th>
+                            <th>按年變動 (%)</th>
+                            <th>狀態</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2025</td>
+                            <td>3月</td>
+                            <td>30,091</td>
+                            <td>107.8</td>
+                            <td class="value-negative">-3.5%</td>
+                            <td>下滑</td>
+                        </tr>
+                        <tr>
+                            <td>2025</td>
+                            <td>4月</td>
+                            <td>28,876</td>
+                            <td>103.4</td>
+                            <td class="value-negative">-2.3%</td>
+                            <td>下滑</td>
+                        </tr>
+                        <tr>
+                            <td>2025</td>
+                            <td>5月</td>
+                            <td>31,319</td>
+                            <td>112.1</td>
+                            <td class="value-positive">+2.4%</td>
+                            <td>增長</td>
+                        </tr>
+                        <tr>
+                            <td>2025</td>
+                            <td>6月</td>
+                            <td>30,094</td>
+                            <td>107.8</td>
+                            <td class="value-positive">+0.7%</td>
+                            <td>穩定</td>
+                        </tr>
+                        <tr>
+                            <td>2025</td>
+                            <td>7月</td>
+                            <td>29,671</td>
+                            <td>106.2</td>
+                            <td class="value-positive">+1.8%</td>
+                            <td>增長</td>
+                        </tr>
+                        <tr>
+                            <td>2025</td>
+                            <td>8月</td>
+                            <td>30,367</td>
+                            <td>108.7</td>
+                            <td class="value-positive">+3.9%</td>
+                            <td>增長</td>
+                        </tr>
+                        <tr>
+                            <td>2025</td>
+                            <td>9月</td>
+                            <td>31,344</td>
+                            <td>112.2</td>
+                            <td class="value-positive">+6.0%</td>
+                            <td>增長</td>
+                        </tr>
+                        <tr>
+                            <td>2025</td>
+                            <td>10月</td>
+                            <td>35,174</td>
+                            <td>126.0</td>
+                            <td class="value-positive">+6.9%</td>
+                            <td>增長</td>
+                        </tr>
+                        <tr>
+                            <td>2025</td>
+                            <td>11月</td>
+                            <td>33,727</td>
+                            <td>120.8</td>
+                            <td class="value-positive">+6.5%</td>
+                            <td>增長</td>
+                        </tr>
+                        <tr>
+                            <td>2025</td>
+                            <td>12月</td>
+                            <td>35,018</td>
+                            <td>125.4</td>
+                            <td class="value-positive">+6.6%</td>
+                            <td>增長</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td>2026</td>
+                            <td>1月</td>
+                            <td>37,327</td>
+                            <td>133.7</td>
+                            <td class="value-positive">+5.5%</td>
+                            <td>✓ 增長</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td>2026</td>
+                            <td>2月 (p)</td>
+                            <td>35,050</td>
+                            <td>125.5</td>
+                            <td class="value-positive">+19.3%</td>
+                            <td>✓ 強勁增長</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 1rem; font-size: 0.85rem; color: #7f8c8d;">
+                    註: (p) 表示初步數據 | 銷售額為港幣百萬元 | 價值指數以 2019年10月-2020年9月為基準期（=100）
+                </p>
+            </div>
+        </div>
+
+        <!-- 頁腳 -->
+        <div class="footer">
+            <p>🔗 數據來源：香港特別行政區政府統計處（2026年4月1日發佈）</p>
+            <p style="margin-top: 0.5rem;">此圖表可直接嵌入網頁或進行截圖使用</p>
+        </div>
+    </div>
+
+    <script>
+        // ===== 零售銷售趨勢圖表 =====
+        function initializeRetailTrendsChart() {
+            const ctx = document.getElementById('retailTrendsChart');
+            if (!ctx) return;
+            
+            // 時間標籤
+            const months = [
+                '2020年1月', '2020年2月', '2020年3月', '2020年4月', '2020年5月', '2020年6月', 
+                '2020年7月', '2020年8月', '2020年9月', '2020年10月', '2020年11月', '2020年12月',
+                '2021年1月', '2021年2月', '2021年3月', '2021年4月', '2021年5月', '2021年6月',
+                '2021年7月', '2021年8月', '2021年9月', '2021年10月', '2021年11月', '2021年12月',
+                '2022年1月', '2022年2月', '2022年3月', '2022年4月', '2022年5月', '2022年6月',
+                '2022年7月', '2022年8月', '2022年9月', '2022年10月', '2022年11月', '2022年12月',
+                '2023年1月', '2023年2月', '2023年3月', '2023年4月', '2023年5月', '2023年6月',
+                '2023年7月', '2023年8月', '2023年9月', '2023年10月', '2023年11月', '2023年12月',
+                '2024年1月', '2024年2月', '2024年3月', '2024年4月', '2024年5月', '2024年6月',
+                '2024年7月', '2024年8月', '2024年9月', '2024年10月', '2024年11月', '2024年12月',
+                '2025年1月', '2025年2月', '2025年3月', '2025年4月', '2025年5月', '2025年6月',
+                '2025年7月', '2025年8月', '2025年9月', '2025年10月', '2025年11月', '2025年12月',
+                '2026年1月', '2026年2月'
+            ];
+
+            // 價值指數
+            const valueIndex = [
+                135.1, 81.4, 82.3, 86.3, 95.9, 95.0, 94.8, 91.5, 93.4, 98.2, 102.8, 112.3,
+                116.6, 105.7, 98.9, 96.7, 105.9, 100.5, 97.4, 102.4, 100.3, 110.1, 110.1, 119.2,
+                121.2, 90.3, 85.3, 108.0, 104.2, 99.2, 101.4, 102.2, 100.7, 114.5, 105.6, 120.6,
+                129.5, 118.6, 120.0, 124.1, 123.5, 118.5, 118.3, 116.2, 113.7, 121.2, 122.4, 130.1,
+                130.8, 120.9, 111.6, 105.9, 109.5, 107.0, 104.4, 104.6, 105.9, 117.8, 113.4, 117.6,
+                126.7, 105.2, 107.8, 103.4, 112.1, 107.8, 106.2, 108.7, 112.2, 126.0, 120.8, 125.4,
+                133.7, 125.5
+            ];
+
+            // 按年變動百分比
+            const yoyChange = [
+                -21.5, -44.0, -42.1, -36.1, -32.9, -24.7, -23.1, -13.1, -12.8, -8.7, -4.1, -13.3,
+                -13.7, 30.0, 20.2, 12.1, 10.4, 5.8, 2.8, 11.9, 7.4, 12.1, 7.1, 6.1,
+                4.0, -14.6, -13.8, 11.7, -1.6, -1.3, 4.1, -0.2, 0.3, 4.0, -4.1, 1.2,
+                6.9, 31.3, 40.8, 14.9, 18.5, 19.5, 16.7, 13.7, 13.0, 5.8, 15.9, 7.8,
+                0.9, 1.9, -7.0, -14.7, -11.4, -9.7, -11.7, -10.0, -6.9, -2.8, -7.3, -9.6,
+                -3.1, -13.0, -3.5, -2.3, 2.4, 0.7, 1.8, 3.9, 6.0, 6.9, 6.5, 6.6,
+                5.5, 19.3
+            ];
+
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [
+                        {
+                            label: '零售業銷貨價值指數',
+                            data: valueIndex,
+                            backgroundColor: '#4a9d6f',
+                            borderColor: '#2d5a3d',
+                            borderWidth: 1,
+                            borderRadius: 3,
+                            order: 2,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: '按年變動百分率 (%)',
+                            data: yoyChange,
+                            borderColor: '#d63031',
+                            backgroundColor: 'rgba(214, 48, 49, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0.4,
+                            pointBackgroundColor: '#d63031',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            order: 1,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20,
+                                font: {
+                                    size: 12,
+                                    weight: 600
+                                },
+                                color: '#2d5a3d'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(45, 90, 61, 0.9)',
+                            titleFont: { size: 13, weight: 'bold' },
+                            bodyFont: { size: 12 },
+                            padding: 12,
+                            borderRadius: 6,
+                            displayColors: true,
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.datasetIndex === 0) {
+                                        return '價值指數: ' + context.parsed.y.toFixed(1);
+                                    } else {
+                                        return '按年變動: ' + context.parsed.y.toFixed(1) + '%';
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: false,
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45,
+                                font: {
+                                    size: 10
+                                },
+                                color: '#666'
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: '價值指數',
+                                color: '#2d5a3d',
+                                font: { weight: 'bold' }
+                            },
+                            ticks: {
+                                color: '#2d5a3d',
+                                font: { weight: '600' }
+                            },
+                            grid: {
+                                color: '#e9ecef',
+                                lineWidth: 0.5
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: '按年變動百分率 (%)',
+                                color: '#d63031',
+                                font: { weight: 'bold' }
+                            },
+                            ticks: {
+                                color: '#d63031',
+                                font: { weight: '600' },
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 頁面加載後初始化圖表
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeRetailTrendsChart();
+        });
+    </script>
+</body>
+</html>
