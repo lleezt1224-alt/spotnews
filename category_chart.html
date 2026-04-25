@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>零售業品類銷售指數 - 2026年1月</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2d5a3d 0%, #1e4d2b 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 4px solid #00b894;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.95;
+            margin-bottom: 0.3rem;
+        }
+
+        .header .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.85;
+            font-style: italic;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 900px;
+            margin-bottom: 30px;
+            background: #fafafa;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+        }
+
+        .legend-info {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+        }
+
+        .legend-color {
+            width: 30px;
+            height: 20px;
+            border-radius: 3px;
+            border: 1px solid #ddd;
+        }
+
+        .data-description {
+            background: #f8f9fa;
+            border-left: 4px solid #00b894;
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin-top: 30px;
+            font-size: 0.95rem;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .data-table {
+            margin-top: 30px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #2d5a3d 0%, #1e4d2b 100%);
+            color: white;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #00b894;
+        }
+
+        td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        tbody tr:hover {
+            background-color: #f5f7fa;
+            transition: background-color 0.3s ease;
+        }
+
+        .value-positive {
+            color: #7cb342;
+            font-weight: 600;
+        }
+
+        .value-negative {
+            color: #d32f2f;
+            font-weight: 600;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 2rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            border-top: 1px solid #e9ecef;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .chart-wrapper {
+                height: 600px;
+            }
+
+            .legend-info {
+                gap: 20px;
+            }
+
+            .content {
+                padding: 15px;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 頁頭 -->
+        <div class="header">
+            <h1>📊 香港零售業品類銷售指數</h1>
+            <p>2026年1月 各产品类别销售表现</p>
+            <p class="subtitle">2026年1月零售業銷售類別價值指數 按年變動百分率</p>
+        </div>
+
+        <!-- 主要內容 -->
+        <div class="content">
+            <!-- 圖例 -->
+            <div class="legend-info">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(to right, #d32f2f 0%, #7cb342 100%);"></div>
+                    <span>負增長（紅色）← → 正增長（綠色）</span>
+                </div>
+            </div>
+
+            <!-- 圖表容器 -->
+            <div class="chart-wrapper">
+                <canvas id="categoryChart"></canvas>
+            </div>
+
+            <!-- 資料說明 -->
+            <div class="data-description">
+                <strong>📌 數據解讀：</strong>
+                <p style="margin-top: 0.5rem;">
+                    2026年1月各產品類別銷售表現形成鮮明對比。電器及其他未分類耐用消費品按年急升38.7%（最高），珠寶首飾、鐘錶及名貴禮物升30.5%，汽車及汽車零件升18.5%，表現明顯跑贏大市。相反，鞋類、有關製品及其他衣物配件按年跌19.9%（最低），其他未分類食品跌28.4%，燃料跌17.5%，百貨公司跌11.3%，數據反映零售業回升並非全面擴散，而是集中在少數高端板塊。
+                </p>
+            </div>
+
+            <!-- 資料表格 -->
+            <div class="data-table">
+                <h3 style="color: #2d5a3d; margin-bottom: 1rem;">詳細數據列表</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>名次</th>
+                            <th>零售類別</th>
+                            <th>按年變動百分率 (%)</th>
+                            <th>表現評級</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>電器及其他未分類耐用消費品</td>
+                            <td class="value-positive">+38.70%</td>
+                            <td>🟢 優異</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>耐用消費品</td>
+                            <td class="value-positive">+31.10%</td>
+                            <td>🟢 優異</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>珠寶首飾、鐘鍊及名貴禮物</td>
+                            <td class="value-positive">+30.50%</td>
+                            <td>🟢 優異</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>汽車及汽車零件</td>
+                            <td class="value-positive">+18.50%</td>
+                            <td>🟢 良好</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>傢具及固定裝置</td>
+                            <td class="value-positive">+16.40%</td>
+                            <td>🟢 良好</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>酒類飲品及煙草</td>
+                            <td class="value-positive">+16.20%</td>
+                            <td>🟢 良好</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>眼鏡店</td>
+                            <td class="value-positive">+15.70%</td>
+                            <td>🟢 良好</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>服裝</td>
+                            <td class="value-positive">+12.30%</td>
+                            <td>🟢 良好</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>所有零售商別</td>
+                            <td class="value-positive">+10.80%</td>
+                            <td>🟢 良好</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>書籍、文具及印品</td>
+                            <td class="value-positive">+8.60%</td>
+                            <td>🟡 中等</td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td>其他未分類消費品</td>
+                            <td class="value-positive">+5.20%</td>
+                            <td>🟡 中等</td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td>其他消費品</td>
+                            <td class="value-positive">+2.10%</td>
+                            <td>🟡 中等</td>
+                        </tr>
+                        <tr>
+                            <td>13</td>
+                            <td>美物及化妝品</td>
+                            <td class="value-negative">-0.80%</td>
+                            <td>🟡 停滯</td>
+                        </tr>
+                        <tr>
+                            <td>14</td>
+                            <td>衣物、鞋類及有關製品</td>
+                            <td class="value-negative">-2.30%</td>
+                            <td>🔴 下滑</td>
+                        </tr>
+                        <tr>
+                            <td>15</td>
+                            <td>超級市場</td>
+                            <td class="value-negative">-5.10%</td>
+                            <td>🔴 下滑</td>
+                        </tr>
+                        <tr>
+                            <td>16</td>
+                            <td>新鮮蔬菜</td>
+                            <td class="value-negative">-5.60%</td>
+                            <td>🔴 下滑</td>
+                        </tr>
+                        <tr>
+                            <td>17</td>
+                            <td>新鮮或急凍魚類及禽畜肉類</td>
+                            <td class="value-negative">-7.80%</td>
+                            <td>🔴 下滑</td>
+                        </tr>
+                        <tr>
+                            <td>18</td>
+                            <td>超級市場及百貨公司內的超級市場部門 (1)</td>
+                            <td class="value-negative">-9.20%</td>
+                            <td>🔴 下滑</td>
+                        </tr>
+                        <tr>
+                            <td>19</td>
+                            <td>中藥</td>
+                            <td class="value-negative">-10.50%</td>
+                            <td>🔴 下滑</td>
+                        </tr>
+                        <tr>
+                            <td>20</td>
+                            <td>食品、酒類飲品及煙草 (超級市場除外)</td>
+                            <td class="value-negative">-11.10%</td>
+                            <td>🔴 下滑</td>
+                        </tr>
+                        <tr>
+                            <td>21</td>
+                            <td>百貨公司</td>
+                            <td class="value-negative">-11.30%</td>
+                            <td>🔴 下滑</td>
+                        </tr>
+                        <tr>
+                            <td>22</td>
+                            <td>燃料</td>
+                            <td class="value-negative">-17.50%</td>
+                            <td>🔴 嚴重下滑</td>
+                        </tr>
+                        <tr>
+                            <td>23</td>
+                            <td>麵包、糕餅、糖果及餅乾</td>
+                            <td class="value-negative">-25.30%</td>
+                            <td>🔴 嚴重下滑</td>
+                        </tr>
+                        <tr>
+                            <td>24</td>
+                            <td>其他未分類食品</td>
+                            <td class="value-negative">-28.40%</td>
+                            <td>🔴 嚴重下滑</td>
+                        </tr>
+                        <tr>
+                            <td>25</td>
+                            <td>鞋類、有關製品及其他衣物配件</td>
+                            <td class="value-negative">-19.90%</td>
+                            <td>🔴 嚴重下滑</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 頁腳 -->
+        <div class="footer">
+            <p>🔗 數據來源：香港特別行政區政府統計處 | 更新時間：2026年4月</p>
+            <p style="margin-top: 0.5rem;">此圖表可直接嵌入網頁或進行截圖使用</p>
+        </div>
+    </div>
+
+    <script>
+        // ===== 品類銷售指數圖表 =====
+        function initializeCategoryChart() {
+            const ctx = document.getElementById('categoryChart');
+            if (!ctx) return;
+            
+            const categories = [
+                '電器及其他未分類耐用消費品',
+                '耐用消費品',
+                '珠寶首飾、鐘鍊及名貴禮物',
+                '汽車及汽車零件',
+                '傢具及固定裝置',
+                '酒類飲品及煙草',
+                '眼鏡店',
+                '服裝',
+                '所有零售商別',
+                '書籍、文具及印品',
+                '其他未分類消費品',
+                '其他消費品',
+                '美物及化妝品',
+                '衣物、鞋類及有關製品',
+                '超級市場',
+                '新鮮蔬菜',
+                '新鮮或急凍魚類及禽畜肉類',
+                '超級市場及百貨公司內的超級市場部門 (1)',
+                '中藥',
+                '食品、酒類飲品及煙草 (超級市場除外)',
+                '百貨公司',
+                '燃料',
+                '麵包、糕餅、糖果及餅乾',
+                '其他未分類食品',
+                '鞋類、有關製品及其他衣物配件'
+            ];
+            
+            const values = [38.7, 31.1, 30.5, 18.5, 16.4, 16.2, 15.7, 12.3, 10.8, 8.6, 5.2, 2.1, -0.8, -2.3, -5.1, -5.6, -7.8, -9.2, -10.5, -11.1, -11.3, -17.5, -25.3, -28.4, -19.9];
+            
+            // 创建颜色数组 - 使用红绿渐变色
+            const getColor = (value) => {
+                const minValue = -28.4;
+                const maxValue = 38.7;
+                const range = maxValue - minValue;
+                const normalized = (value - minValue) / range;
+                
+                // 从深红色 (#d32f2f) 到深绿色 (#7cb342)
+                if (normalized < 0.5) {
+                    // 红色到白色的过渡
+                    const r = Math.round(211 + (255 - 211) * (normalized * 2));
+                    const g = Math.round(47 + (255 - 47) * (normalized * 2));
+                    const b = Math.round(47 + (255 - 47) * (normalized * 2));
+                    return `rgb(${r}, ${g}, ${b})`;
+                } else {
+                    // 白色到绿色的过渡
+                    const r = Math.round(255 - (255 - 124) * ((normalized - 0.5) * 2));
+                    const g = Math.round(255 - (255 - 179) * ((normalized - 0.5) * 2));
+                    const b = Math.round(255 - (255 - 66) * ((normalized - 0.5) * 2));
+                    return `rgb(${r}, ${g}, ${b})`;
+                }
+            };
+            
+            const colors = values.map(v => getColor(v));
+            
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: categories,
+                    datasets: [{
+                        label: '按年變動百分率(%)',
+                        data: values,
+                        backgroundColor: colors,
+                        borderColor: colors,
+                        borderWidth: 0,
+                        borderRadius: 2
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.x.toFixed(2) + '%';
+                                }
+                            },
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            titleFont: { size: 13, weight: 'bold' },
+                            bodyFont: { size: 12 },
+                            padding: 12,
+                            borderRadius: 6,
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                },
+                                font: {
+                                    size: 12
+                                },
+                                color: '#666'
+                            },
+                            grid: {
+                                drawBorder: true,
+                                color: '#e0e0e0',
+                                lineWidth: 0.5
+                            },
+                            min: -40,
+                            max: 80
+                        },
+                        y: {
+                            ticks: {
+                                font: {
+                                    size: 11
+                                },
+                                color: '#333'
+                            },
+                            grid: {
+                                display: false,
+                                drawBorder: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 頁面加載後初始化圖表
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeCategoryChart();
+        });
+    </script>
+</body>
+</html>
