@@ -243,48 +243,25 @@ function initializeCategoryChart() {
         '其他消費品',
         '美物及化妝品',
         '衣物、鞋類及有關製品',
-        '超級市場',
-        '新鮮蔬菜',
-        '新鮮或急凍魚類及禽畜肉類',
-        '超級市場及百貨公司內的超級市場部門 (1)',
-        '中藥',
-        '食品、酒類飲品及煙草 (超級市場除外)',
-        '百貨公司',
+        '其他食品',
+        '鞋類、有關製品及其他衣物配件',
         '燃料',
-        '麵包、糕餅、糖果及餅乾',
-        '其他未分類食品',
-        '鞋類、有關製品及其他衣物配件'
+        '面包、糕餅、糖果及餅乾',
+        '其他食品',
+        '食品、酒精飲品及煙草（超級市場除外）',
+        '百貨公司',
+        '中藥',
+        '新鮮或急凍魚類及禽畜肉類',
+        '新鮮蔬菜',
+        '超級市場'
     ];
     
-    const values = [38.7, 31.1, 30.5, 18.5, 16.4, 16.2, 15.7, 12.3, 10.8, 8.6, 5.2, 2.1, -0.8, -2.3, -5.1, -5.6, -7.8, -9.2, -10.5, -11.1, -11.3, -17.5, -25.3, -28.4, -19.9];
+    const values = [80, 62, 50, 25, 21, 18, 15, 12, 10, 8, 5, 2, -5, -15, -18, -20, -22, -25, -28, -10, -10, -11, -8, -5, -2];
     
-    // 创建颜色数组 - 使用红绿渐变色
-    const getColor = (value) => {
-        const minValue = -19.9;
-        const maxValue = 38.7;
-        const range = maxValue - minValue;
-        const normalized = (value - minValue) / range;
-        
-        // 从红色 (#d32f2f) 到绿色 (#7cb342)
-        if (normalized < 0.5) {
-            // 红色到白色
-            const r = Math.round(211 + (255 - 211) * (normalized * 2));
-            const g = Math.round(47 + (255 - 47) * (normalized * 2));
-            const b = Math.round(47 + (255 - 47) * (normalized * 2));
-            return `rgb(${r}, ${g}, ${b})`;
-        } else {
-            // 白色到绿色
-            const r = Math.round(255 - (255 - 124) * ((normalized - 0.5) * 2));
-            const g = Math.round(255 - (255 - 179) * ((normalized - 0.5) * 2));
-            const b = Math.round(255 - (255 - 66) * ((normalized - 0.5) * 2));
-            return `rgb(${r}, ${g}, ${b})`;
-        }
-    };
-    
-    const colors = values.map(v => getColor(v));
+    const colors = values.map(v => v >= 0 ? '#7cb342' : '#ef5350');
     
     const chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'barH',
         data: {
             labels: categories,
             datasets: [{
@@ -307,10 +284,10 @@ function initializeCategoryChart() {
                 tooltip: {
                     callbacks: {
                         label: function(context) {
-                            return context.parsed.x.toFixed(2) + '%';
+                            return context.parsed.x + '%';
                         }
                     },
-                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    backgroundColor: 'rgba(0,0,0,0.7)',
                     titleFont: { size: 12, weight: 'bold' },
                     bodyFont: { size: 12 },
                     padding: 10,
@@ -333,8 +310,8 @@ function initializeCategoryChart() {
                         color: '#e0e0e0',
                         lineWidth: 0.5
                     },
-                    min: -40,
-                    max: 80
+                    min: -50,
+                    max: 100
                 },
                 y: {
                     ticks: {
@@ -353,12 +330,189 @@ function initializeCategoryChart() {
     });
 }
 
+// ===== 零售銷售趨勢圖表 =====
+function initializeRetailTrendsChart() {
+    const ctx = document.getElementById('retailTrendsChart');
+    if (!ctx) return;
+    
+    // 時間標籤
+    const months = [
+        '2020年1月', '2020年2月', '2020年3月', '2020年4月', '2020年5月', '2020年6月', 
+        '2020年7月', '2020年8月', '2020年9月', '2020年10月', '2020年11月', '2020年12月',
+        '2021年1月', '2021年2月', '2021年3月', '2021年4月', '2021年5月', '2021年6月',
+        '2021年7月', '2021年8月', '2021年9月', '2021年10月', '2021年11月', '2021年12月',
+        '2022年1月', '2022年2月', '2022年3月', '2022年4月', '2022年5月', '2022年6月',
+        '2022年7月', '2022年8月', '2022年9月', '2022年10月', '2022年11月', '2022年12月',
+        '2023年1月', '2023年2月', '2023年3月', '2023年4月', '2023年5月', '2023年6月',
+        '2023年7月', '2023年8月', '2023年9月', '2023年10月', '2023年11月', '2023年12月',
+        '2024年1月', '2024年2月', '2024年3月', '2024年4月', '2024年5月', '2024年6月',
+        '2024年7月', '2024年8月', '2024年9月', '2024年10月', '2024年11月', '2024年12月',
+        '2025年1月', '2025年2月', '2025年3月', '2025年4月', '2025年5月', '2025年6月',
+        '2025年7月', '2025年8月', '2025年9月', '2025年10月', '2025年11月', '2025年12月',
+        '2026年1月', '2026年2月'
+    ];
+
+    // 價值指數
+    const valueIndex = [
+        135.1, 81.4, 82.3, 86.3, 95.9, 95.0, 94.8, 91.5, 93.4, 98.2, 102.8, 112.3,
+        116.6, 105.7, 98.9, 96.7, 105.9, 100.5, 97.4, 102.4, 100.3, 110.1, 110.1, 119.2,
+        121.2, 90.3, 85.3, 108.0, 104.2, 99.2, 101.4, 102.2, 100.7, 114.5, 105.6, 120.6,
+        129.5, 118.6, 120.0, 124.1, 123.5, 118.5, 118.3, 116.2, 113.7, 121.2, 122.4, 130.1,
+        130.8, 120.9, 111.6, 105.9, 109.5, 107.0, 104.4, 104.6, 105.9, 117.8, 113.4, 117.6,
+        126.7, 105.2, 107.8, 103.4, 112.1, 107.8, 106.2, 108.7, 112.2, 126.0, 120.8, 125.4,
+        133.7, 125.5
+    ];
+
+    // 按年變動百分比
+    const yoyChange = [
+        -21.5, -44.0, -42.1, -36.1, -32.9, -24.7, -23.1, -13.1, -12.8, -8.7, -4.1, -13.3,
+        -13.7, 30.0, 20.2, 12.1, 10.4, 5.8, 2.8, 11.9, 7.4, 12.1, 7.1, 6.1,
+        4.0, -14.6, -13.8, 11.7, -1.6, -1.3, 4.1, -0.2, 0.3, 4.0, -4.1, 1.2,
+        6.9, 31.3, 40.8, 14.9, 18.5, 19.5, 16.7, 13.7, 13.0, 5.8, 15.9, 7.8,
+        0.9, 1.9, -7.0, -14.7, -11.4, -9.7, -11.7, -10.0, -6.9, -2.8, -7.3, -9.6,
+        -3.1, -13.0, -3.5, -2.3, 2.4, 0.7, 1.8, 3.9, 6.0, 6.9, 6.5, 6.6,
+        5.5, 19.3
+    ];
+
+    const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: months,
+            datasets: [
+                {
+                    label: '零售業銷貨價值指數',
+                    data: valueIndex,
+                    backgroundColor: '#4a9d6f',
+                    borderColor: '#2d5a3d',
+                    borderWidth: 1,
+                    borderRadius: 3,
+                    order: 2,
+                    yAxisID: 'y'
+                },
+                {
+                    label: '按年變動百分率 (%)',
+                    data: yoyChange,
+                    borderColor: '#d63031',
+                    backgroundColor: 'rgba(214, 48, 49, 0.1)',
+                    borderWidth: 3,
+                    fill: false,
+                    tension: 0.4,
+                    pointBackgroundColor: '#d63031',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    order: 1,
+                    yAxisID: 'y1'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20,
+                        font: {
+                            size: 12,
+                            weight: 600
+                        },
+                        color: '#2d5a3d'
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(45, 90, 61, 0.9)',
+                    titleFont: { size: 13, weight: 'bold' },
+                    bodyFont: { size: 12 },
+                    padding: 12,
+                    borderRadius: 6,
+                    displayColors: true,
+                    callbacks: {
+                        label: function(context) {
+                            if (context.datasetIndex === 0) {
+                                return '價值指數: ' + context.parsed.y.toFixed(1);
+                            } else {
+                                return '按年變動: ' + context.parsed.y.toFixed(1) + '%';
+                            }
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    stacked: false,
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        maxRotation: 45,
+                        minRotation: 45,
+                        font: {
+                            size: 10
+                        },
+                        color: '#666'
+                    }
+                },
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    title: {
+                        display: true,
+                        text: '價值指數',
+                        color: '#2d5a3d',
+                        font: { weight: 'bold' }
+                    },
+                    ticks: {
+                        color: '#2d5a3d',
+                        font: { weight: '600' }
+                    },
+                    grid: {
+                        color: '#e9ecef',
+                        lineWidth: 0.5
+                    }
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: '按年變動百分率 (%)',
+                        color: '#d63031',
+                        font: { weight: 'bold' }
+                    },
+                    ticks: {
+                        color: '#d63031',
+                        font: { weight: '600' },
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    },
+                    grid: {
+                        drawOnChartArea: false
+                    }
+                }
+            }
+        }
+    });
+}
+
 // ===== 頁面加載完成後的初始化 =====
 document.addEventListener('DOMContentLoaded', () => {
     console.log('數據新聞網站已加載完成');
     
     // 初始化圖表
     initializeCategoryChart();
+    initializeRetailTrendsChart();
     
     // 添加頁面加載動畫
     document.body.style.animation = 'fadeIn 0.6s ease-out';
