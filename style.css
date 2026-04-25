@@ -233,6 +233,13 @@ body {
     border-bottom: 2px solid var(--accent-color);
 }
 
+.chart-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+}
+
 .chart-image {
     width: 100%;
     height: auto;
