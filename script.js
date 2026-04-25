@@ -223,9 +223,142 @@ function animateStatNumbers() {
 
 animateStatNumbers();
 
+// ===== 品類銷售指數圖表 =====
+function initializeCategoryChart() {
+    const ctx = document.getElementById('categoryChart');
+    if (!ctx) return;
+    
+    const categories = [
+        '電器及其他未分類耐用消費品',
+        '耐用消費品',
+        '珠寶首飾、鐘鍊及名貴禮物',
+        '汽車及汽車零件',
+        '傢具及固定裝置',
+        '酒類飲品及煙草',
+        '眼鏡店',
+        '服裝',
+        '所有零售商別',
+        '書籍、文具及印品',
+        '其他未分類消費品',
+        '其他消費品',
+        '美物及化妝品',
+        '衣物、鞋類及有關製品',
+        '超級市場',
+        '新鮮蔬菜',
+        '新鮮或急凍魚類及禽畜肉類',
+        '超級市場及百貨公司內的超級市場部門 (1)',
+        '中藥',
+        '食品、酒類飲品及煙草 (超級市場除外)',
+        '百貨公司',
+        '燃料',
+        '麵包、糕餅、糖果及餅乾',
+        '其他未分類食品',
+        '鞋類、有關製品及其他衣物配件'
+    ];
+    
+    const values = [38.7, 31.1, 30.5, 18.5, 16.4, 16.2, 15.7, 12.3, 10.8, 8.6, 5.2, 2.1, -0.8, -2.3, -5.1, -5.6, -7.8, -9.2, -10.5, -11.1, -11.3, -17.5, -25.3, -28.4, -19.9];
+    
+    // 创建颜色数组 - 使用红绿渐变色
+    const getColor = (value) => {
+        const minValue = -19.9;
+        const maxValue = 38.7;
+        const range = maxValue - minValue;
+        const normalized = (value - minValue) / range;
+        
+        // 从红色 (#d32f2f) 到绿色 (#7cb342)
+        if (normalized < 0.5) {
+            // 红色到白色
+            const r = Math.round(211 + (255 - 211) * (normalized * 2));
+            const g = Math.round(47 + (255 - 47) * (normalized * 2));
+            const b = Math.round(47 + (255 - 47) * (normalized * 2));
+            return `rgb(${r}, ${g}, ${b})`;
+        } else {
+            // 白色到绿色
+            const r = Math.round(255 - (255 - 124) * ((normalized - 0.5) * 2));
+            const g = Math.round(255 - (255 - 179) * ((normalized - 0.5) * 2));
+            const b = Math.round(255 - (255 - 66) * ((normalized - 0.5) * 2));
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+    };
+    
+    const colors = values.map(v => getColor(v));
+    
+    const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: categories,
+            datasets: [{
+                label: '按年變動百分率(%)',
+                data: values,
+                backgroundColor: colors,
+                borderColor: colors,
+                borderWidth: 0,
+                borderRadius: 2
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.parsed.x.toFixed(2) + '%';
+                        }
+                    },
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    titleFont: { size: 12, weight: 'bold' },
+                    bodyFont: { size: 12 },
+                    padding: 10,
+                    borderRadius: 4
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        },
+                        font: {
+                            size: 11
+                        },
+                        color: '#666'
+                    },
+                    grid: {
+                        drawBorder: true,
+                        color: '#e0e0e0',
+                        lineWidth: 0.5
+                    },
+                    min: -40,
+                    max: 80
+                },
+                y: {
+                    ticks: {
+                        font: {
+                            size: 11
+                        },
+                        color: '#333'
+                    },
+                    grid: {
+                        display: false,
+                        drawBorder: false
+                    }
+                }
+            }
+        }
+    });
+}
+
 // ===== 頁面加載完成後的初始化 =====
 document.addEventListener('DOMContentLoaded', () => {
     console.log('數據新聞網站已加載完成');
+    
+    // 初始化圖表
+    initializeCategoryChart();
     
     // 添加頁面加載動畫
     document.body.style.animation = 'fadeIn 0.6s ease-out';
