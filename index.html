@@ -13,7 +13,7 @@
     <!-- 導覽欄 -->
     <nav class="navbar">
         <div class="container">
-            <div class="logo">零售市場動態</div>
+            <div class="logo">香港數據新聞</div>
             <ul class="nav-links">
                 <li><a href="#story">故事</a></li>
                 <li><a href="#data">數據</a></li>
@@ -25,8 +25,8 @@
     <!-- 英雄區域 -->
     <header class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">香港零售1月銷貨值升5.5%</h1>
-            <p class="hero-subtitle">核心區空置率仍偏高　復甦力度有限</p>
+            <h1 class="hero-title">香港零售1月銷貨值升5.5%　核心區空置率仍偏高</h1>
+            
             <div class="hero-stat">
                 <div class="stat-item">
                     <span class="stat-number">5.5%</span>
@@ -57,12 +57,7 @@
     <!-- 正文內容 -->
     <section id="content" class="story-content">
         <div class="container">
-            <!-- 圖表區域 1：零售銷售指數 -->
-            <div class="chart-container">
-                <h3>📈 長期走勢：20年波動軌跡</h3>
-                <div class='tableauPlaceholder' id='viz1776174308690' style='position: relative'><noscript><a href='#'><img alt='零售銷售指數折線圖 ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;1_&#47;1_17759019076660&#47;1&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='1_17759019076660&#47;1' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;1_&#47;1_17759019076660&#47;1&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /><param name='filter' value='publish=yes' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1776174308690');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
-                <p class="chart-caption">香港零售銷售指數經歷20年波動。2013年創歷史高峰，2020年疫情造成劇烈下跌，近年逐步恢復，2026年1月回升至相對穩定區間。</p>
-            </div>
+   
 
             <!-- 第一段：核心區空置情況 -->
             <div class="content-block">
@@ -71,60 +66,13 @@
                     最新數字顯示，2025年第三季四大核心區（中環、尖沙咀、旺角、銅鑼灣）商舖空置率平均為11.9%，其中中環空置率達15.2%，銅鑼灣13.2%，尖沙咀12.5%，旺角則為9.9%。整體而言，核心零售區仍然面對明顯租舖壓力，與總銷貨值上升形成落差。
                 </p>
             </div>
-
-            <!-- 圖表區域 2：品類分化 -->
-            <div class="chart-container">
-                <h3>📊 品類分化：贏家與輸家</h3>
-                <p class="chart-subtitle">2026年1月零售業銷售類別價值指數 按年變動百分率</p>
-                <div style="position: relative; height: 800px; margin: 30px 0;">
-                    <canvas id="categoryChart"></canvas>
-                </div>
-                <p class="chart-caption">2026年1月各產品類別銷售表現形成鮮明對比。電器、珠寶等高單價商品大幅攀升（綠色），而傳統品類如衣履、燃料則陷入衰退（紅色）。</p>
-            </div>
-
-            <!-- 第二段：品類分化詳細 -->
-            <div class="content-block">
-                <h2>結構分化明顯　高端與傳統拉扯</h2>
-                <p>
-                    按品類計，復甦情況亦不平均。電器及其他未分類耐用消費品按年急升38.7%，珠寶首飾、鐘錶及名貴禮物升31.1%，汽車及汽車零件升18.5%，傢具及固定裝置亦升16.4%，表現明顯跑贏大市。
-                </p>
-                <p>
-                    相反，部分傳統消費板塊仍然受壓。鞋類、有關製品及其他衣物配件按年跌19.9%，燃料跌17.5%，百貨公司貨品則跌11.1%。數據反映，零售業回升並非全面擴散，而是集中在少數板塊。
-                </p>
-            </div>
-
-            <!-- 第三段：網上銷售 -->
-            <div class="content-block">
-                <h2>網上銷售增長　補足仍有限</h2>
-                <p>
-                    網上銷售同樣持續增長，2026年1月按年升25.1%，但佔總零售額仍只有8%，短期內未能完全補足實體門店的壓力。
-                </p>
-            </div>
-
-            <!-- 網上銷售構成圖表 -->
-            <div class="chart-container">
-                <h3>💻 網上銷售構成：2026年1月</h3>
-                <canvas id="onlineSalesChart" style="max-height: 400px;"></canvas>
-                <p class="chart-caption">網上銷售由無店面零售商（53.1%）和其他零售商（46.9%）組成。無店面零售商（如電商平台）佔據超過一半的網上銷售份額。</p>
-            </div>
-
-            <!-- 第四段：歷史背景 -->
-            <div class="content-block">
-                <h2>疫情遺留　元氣未復</h2>
-                <p>
-                    若拉長時間觀察，2025年全年零售總額僅錄得約1%增幅；2020年則曾大跌24.3%，顯示疫情帶來的衝擊至今仍未完全消化。放眼回顧2013年的歷史高峰，香港零售業復甦之路仍然漫長。
-                </p>
-            </div>
-        </div>
-    </section>
-
-            <!-- 熱力圖部分 -->
-            <div class="chart-container">
-                <h3>🗺️ 香港商鋪空置率熱力圖</h3>
-                <p class="chart-caption">2025年Q3 各地區商鋪空置率分佈</p>
-                
+  <!-- 熱力圖部分 -->
+              <div class="chart-container">
+                <h3>香港商鋪空置率熱力圖</h3>
+                 <p class="chart-caption">2025年Q3 各地區商鋪空置率分佈</p>
                 <div class="heatmap-content">
                     <div id="map" class="heatmap-map"></div>
+                
                     
                     <div class="heatmap-legend">
                         <div class="legend-title">空置率級別</div>
@@ -137,14 +85,14 @@
                             <span class="legend-label">10-12% (中)</span>
                         </div>
                         <div class="legend-item">
-                            <div class="legend-color" style="background: #e74c3c;"></div>
+                            <div class="legend-color" style="background: #E6918A;"></div>
                             <span class="legend-label">12-15% (高)</span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background: #c0392b;"></div>
                             <span class="legend-label">> 15% (極高)</span>
                         </div>
-                    </div>
+                      </div>  
                 </div>
 
                 <div class="heatmap-table">
@@ -213,12 +161,64 @@
                     </table>
                 </div>
             </div>
+          
+
+            <!-- 第二段：品類分化詳細 -->
+            <div class="content-block">
+                <h2>品類結構分化明顯</h2>
+                <p>
+                    按品類計，復甦情況亦不平均。電器及其他未分類耐用消費品按年急升38.7%，珠寶首飾、鐘錶及名貴禮物升31.1%，汽車及汽車零件升18.5%，傢具及固定裝置亦升16.4%，表現明顯跑贏大市。
+                </p>
+                <p>
+                    相反，部分傳統消費板塊仍然受壓。鞋類、有關製品及其他衣物配件按年跌19.9%，燃料跌17.5%，百貨公司貨品則跌11.1%。數據反映，零售業回升並非全面擴散，而是集中在少數板塊。
+                </p>
+            </div>
+  <!-- 圖表區域 2：品類分化 -->
+                   
+            <div class="chart-container">
+                <h3>📊 品類分化：贏家與輸家</h3>
+                <p class="chart-subtitle">2026年1月零售業銷售類別價值指數 按年變動百分率</p>
+                <div style="position: relative; height: 800px; margin: 30px 0;">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+                <p class="chart-caption">2026年1月各產品類別銷售表現形成鮮明對比。電器、珠寶等高單價商品大幅攀升（綠色），而傳統品類如衣履、燃料則陷入衰退（紅色）。</p>
+            </div>
+            <!-- 第三段：網上銷售 -->
+            <div class="content-block">
+                <h2>網上銷售增長　補足仍有限</h2>
+                <p>
+                    網上銷售同樣持續增長，2026年1月按年升25.1%，但佔總零售額仍只有8%，短期內未能完全補足實體門店的壓力。
+                </p>
+            </div>
+ <!-- 網上銷售構成圖表 -->
+            <div class="chart-container">
+                <h3>網上銷售構成：2026年1月</h3>
+                <canvas id="onlineSalesChart" style="max-height: 400px;"></canvas>
+                <p class="chart-caption">網上銷售由無店面零售商（53.1%）和其他零售商（46.9%）組成。無店面零售商（如電商平台）佔據超過一半的網上銷售份額。</p>
+            </div>
+            <!-- 第四段：歷史背景 -->
+            <div class="content-block">
+                <h2>疫情遺留　元氣未復</h2>
+                <p>
+                    若拉長時間觀察，2025年全年零售總額僅錄得約1%增幅；2020年則曾大跌24.3%，顯示疫情帶來的衝擊至今仍未完全消化。放眼回顧2013年的歷史高峰，香港零售業復甦之路仍然漫長。
+                </p>
+            </div>
+         <!-- 圖表區域 1：零售銷售指數 -->
+            <div class="chart-container">
+                <h3>長期走勢：20年波動軌跡</h3>
+                <div class='tableauPlaceholder' id='viz1776174308690' style='position: relative'><noscript><a href='#'><img alt='零售銷售指數折線圖 ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;1_&#47;1_17759019076660&#47;1&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='1_17759019076660&#47;1' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;1_&#47;1_17759019076660&#47;1&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /><param name='filter' value='publish=yes' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1776174308690');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+                <p class="chart-caption">香港零售銷售指數經歷20年波動。2013年創歷史高峰，2020年疫情造成劇烈下跌，近年逐步恢復，2026年1月回升至相對穩定區間。</p>
+            </div>
+        </div>
+    </section>
+
+          
 
             <!-- 結論 -->
             <div class="content-block highlight">
-                <h2>📊 總結：復甦速度不一　投資者需謹慎</h2>
+                <h2>總結</h2>
                 <p>
-                    整體來看，香港零售市道雖然已見回暖，但更多是結構性復甦，距離全面復甦仍有一段距離。高端消費與傳統商品的分化越發明顯，核心商業區的租舖壓力也未見紓緩，這都提示市場參與者需要採取更精細化的策略來應對不同地區與品類的差異。
+                    整體來看香港零售現狀，雖然數據呈現出回暖現象，但整體偏向結構性復甦，距離全面復甦仍有一段距離。
                 </p>
             </div>
         </div>
@@ -259,7 +259,7 @@
                     <div class="data-value">-24.3%</div>
                     <div class="data-change negative">疫情衝擊</div>
                 </div>
-                <div class="data-card">
+                  <div class="data-card">
                     <div class="data-title">中環商舖空置率</div>
                     <div class="data-value">15.2%</div>
                     <div class="data-change negative">2025年Q3最高</div>
@@ -353,7 +353,7 @@
         // 根據空置率返回顏色
         function getColor(vacancy) {
             if (vacancy > 15) return '#c0392b';
-            if (vacancy > 12) return '#e74c3c';
+            if (vacancy > 12) return '#E6918A';
             if (vacancy > 10) return '#f39c12';
             return '#00b894';
         }
